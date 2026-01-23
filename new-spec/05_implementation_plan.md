@@ -1,6 +1,6 @@
 ---
 title: 実装計画書
-version: 1.1.0
+version: 1.3.0
 date: 2026-01-24
 status: active
 references:
@@ -405,6 +405,10 @@ flowchart TB
         f5["feature/p5-*"]
     end
 
+    subgraph Documentation["ドキュメントブランチ"]
+        doc["doc/*"]
+    end
+
     subgraph Fixes["修正ブランチ"]
         bugfix["bugfix/*"]
         hotfix["hotfix/*"]
@@ -415,6 +419,7 @@ flowchart TB
     f3 --> develop
     f4 --> develop
     f5 --> develop
+    doc --> develop
     bugfix --> develop
     develop --> main
     hotfix --> main
@@ -423,18 +428,52 @@ flowchart TB
 
 #### ブランチ命名規則（詳細）
 
-| 種類 | パターン | 例 |
-|------|----------|-----|
-| 機能開発 | `feature/p{N}-{task-name}` | `feature/p1-cli-setup` |
-| バグ修正 | `bugfix/{issue-description}` | `bugfix/path-traversal` |
-| 緊急修正 | `hotfix/{critical-issue}` | `hotfix/server-crash` |
-| リリース | `release/v{version}` | `release/v2.0.0` |
+| 種類 | パターン | 例 | 派生元 |
+|------|----------|-----|--------|
+| 機能開発 | `feature/p{N}-{task-name}` | `feature/p1-cli-setup` | `develop` |
+| バグ修正 | `bugfix/{issue-description}` | `bugfix/path-traversal` | `develop` |
+| 緊急修正 | `hotfix/{critical-issue}` | `hotfix/server-crash` | `main` |
+| リリース | `release/v{version}` | `release/v2.0.0` | `develop` |
+| ドキュメント | `doc/{document-name}` | `doc/basic-new-spec` | `develop` |
+
+#### ドキュメントブランチ運用ルール
+
+`doc/*` ブランチは仕様書やドキュメントの作成・更新に使用します。
+
+**用途**:
+- 仕様書の新規作成・更新
+- README、CONTRIBUTING等のプロジェクトドキュメント
+- 設計ドキュメントの追加・修正
+
+**運用フロー**:
+```bash
+# 1. develop から派生
+git checkout develop
+git checkout -b doc/basic-new-spec
+
+# 2. ドキュメント作業を実施
+# new-spec/, docs/ などを編集
+
+# 3. develop へマージ
+git checkout develop
+git merge doc/basic-new-spec
+
+# 4. ブランチ削除（オプション）
+git branch -d doc/basic-new-spec
+```
+
+**マージ先**:
+- 通常は `develop` へマージ
+- 緊急のドキュメント修正は `main` へ直接マージも可
 
 #### 全ブランチ一覧（計画）
 
 ```
 main
 ├── develop
+│   ├── doc/basic-new-spec            # 仕様書作成・更新
+│   ├── doc/*                         # その他ドキュメント作業
+│   │
 │   ├── feature/p1-package-setup      # 1.1, 1.2
 │   ├── feature/p1-cli                # 1.3
 │   ├── feature/p1-server             # 1.4, 1.5
@@ -862,6 +901,7 @@ npm run format:check   # コードフォーマット確認
 | 1.0.0 | 2026-01-24 | 初版作成 - 5フェーズの実装計画を定義 | System |
 | 1.1.0 | 2026-01-24 | 並列処理戦略、詳細ブランチ戦略、コンフリクト防止策を追加 | Claude Code |
 | 1.2.0 | 2026-01-24 | 04_tasks.mdとの整合性確保（ファイル名・依存関係・所有権マップ修正）、bin/mdv.js拡張子統一 | Claude Code |
+| 1.3.0 | 2026-01-24 | doc/*ブランチ（ドキュメント用）を追加、ブランチ命名規則に派生元を明記 | Claude Code |
 
 ---
 
