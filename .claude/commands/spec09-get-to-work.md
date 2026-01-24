@@ -52,8 +52,8 @@ description: タスク仕様書から未実装タスクを自動的に選択し�
 | タスク実装 | verificationをすべてクリア |
 | コミット・プッシュ | |
 | PR作成 | フォーマットに従う |
-| セルフレビュー・approve | 自身でレビュー |
-| PR自動マージ | approve後即座にマージ |
+| セルフレビュー | gh pr diffで確認 |
+| PR自動マージ | 直接マージ（approve不要） |
 
 ## 禁止事項（全エージェント共通）
 
@@ -204,9 +204,8 @@ Task tool呼び出し3: T03実装サブエージェント (model: sonnet)
 4. コミット: `feat: T[番号] [タスク名]`
 5. PR作成（develop向け）
 6. セルフレビュー（gh pr diff）
-7. approve（gh pr review --approve）
-8. マージ（gh pr merge --squash --delete-branch）
-9. 完了報告（PR URL、verification結果）
+7. マージ（gh pr merge --squash --delete-branch）
+8. 完了報告（PR URL、verification結果）
 
 ## ブランチ名
 [prefix]/t[番号]-[kebab-case-task-name]
@@ -308,8 +307,7 @@ Task tool呼び出し3: T03実装サブエージェント (model: sonnet)
 5. **PR作成・マージ**
    - `gh pr create --base develop --title "feat: T[番号] [タスク名]" --body "[PR本文]"`
    - `gh pr diff [PR番号]` でセルフレビュー
-   - `gh pr review [PR番号] --approve`
-   - `gh pr merge [PR番号] --squash --delete-branch`
+   - `gh pr merge [PR番号] --squash --delete-branch`（approve不要で直接マージ）
 
 6. **完了報告**
    - PR URL
@@ -474,7 +472,7 @@ Task tool呼び出し3: T03実装サブエージェント (model: sonnet)
 - [ ] verification全項目をクリアした
 - [ ] 正しいブランチ命名規則に従った
 - [ ] PRが`develop`に向けて作成された
-- [ ] セルフレビュー・approveを実施した
+- [ ] セルフレビューを実施した
 - [ ] PRをマージしブランチを削除した
 
 ## 品質基準
