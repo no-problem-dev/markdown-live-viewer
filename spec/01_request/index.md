@@ -1,14 +1,8 @@
 ---
-references:
-  - title: "markserv Repository"
-    url: "https://github.com/markserv/markserv"
-  - title: "Current Security Audit"
-    description: "40 security vulnerabilities identified"
-  - title: "Logic Bug Report"
-    description: "4 critical logic bugs documented"
+references: "markserv(./archived-markserv/)"
 ---
 
-# Request Specification: markserv Modernization
+# Request Specification: markdown-viewer（markserv後継プロジェクト）
 
 ## 課題認識
 
