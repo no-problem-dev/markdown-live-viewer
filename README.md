@@ -19,12 +19,12 @@ A lightweight local server that renders Markdown files as beautiful HTML pages, 
 ## Installation
 
 ```bash
-npm install -g markdown-viewer
+npm install -g md-lv
 ```
 
 Or use npx:
 ```bash
-npx markdown-viewer
+npx md-lv
 ```
 
 ## Usage
@@ -33,16 +33,16 @@ npx markdown-viewer
 
 ```bash
 # Serve current directory
-mdv
+mdlv
 
 # Serve specific directory
-mdv --dir /path/to/docs
+mdlv --dir /path/to/docs
 
 # Serve on custom port
-mdv --port 8080
+mdlv --port 8080
 
 # Open README.md automatically
-mdv readme
+mdlv readme
 ```
 
 ### CLI Options
@@ -58,13 +58,13 @@ mdv readme
 
 ### Subcommands
 
-#### `mdv readme`
+#### `mdlv readme`
 
 Find and display the nearest README.md file:
 
 ```bash
 cd /path/to/project
-mdv readme
+mdlv readme
 ```
 
 This command searches up the directory tree to find README.md and opens it in your browser.
