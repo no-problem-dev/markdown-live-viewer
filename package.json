@@ -1,0 +1,64 @@
+{
+  "name": "markdown-viewer",
+  "version": "2.0.0",
+  "description": "Serve Markdown files as HTML with live features - syntax highlighting, Mermaid diagrams, and MathJax formulas",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "main": "src/index.js",
+  "bin": {
+    "mdv": "bin/mdv.js"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "templates/",
+    "public/",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "start": "node bin/mdv.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/unit",
+    "test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/integration",
+    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "prepublishOnly": "npm test"
+  },
+  "keywords": [
+    "markdown",
+    "server",
+    "html",
+    "viewer",
+    "mermaid",
+    "mathjax",
+    "syntax-highlighting",
+    "gfm",
+    "github-flavored-markdown",
+    "documentation",
+    "docs",
+    "cli"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-username/markdown-viewer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/markdown-viewer/issues"
+  },
+  "homepage": "https://github.com/your-username/markdown-viewer#readme",
+  "dependencies": {
+    "express": "^5.0.0",
+    "commander": "^12.0.0",
+    "chokidar": "^3.5.0",
+    "open": "^10.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "supertest": "^6.0.0"
+  }
+}
