@@ -194,16 +194,24 @@ table {
   overflow: hidden;
 }
 
+table th,
+table td {
+  border-color: var(--color-border);
+}
+
 table th {
   background-color: var(--color-bg-secondary);
+  color: var(--color-text);
 }
 
 table tr {
+  background-color: var(--color-bg);
   border-top: 1px solid var(--color-border);
 }
 
 table tr:nth-child(2n) {
   background-color: var(--color-bg-secondary);
+  color: var(--color-text);
 }
 
 /* ============================================

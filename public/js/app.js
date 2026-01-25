@@ -82,10 +82,14 @@ async function renderMermaid() {
   }
 
   try {
+    // ダークモードを検出してテーマを決定
+    const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const mermaidTheme = isDarkMode ? 'dark' : 'default';
+
     // Mermaid を初期化（まだ初期化されていない場合）
     window.mermaid.initialize({
       startOnLoad: false,
-      theme: 'default',
+      theme: mermaidTheme,
       securityLevel: 'loose',
       flowchart: {
         useMaxWidth: true,

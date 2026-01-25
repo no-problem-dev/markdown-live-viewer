@@ -32,7 +32,7 @@ export function parseCLI(argv) {
   if (isReadmeCommand) {
     // Parse readme subcommand with its options
     program
-      .name('mdv readme')
+      .name('mdlv readme')
       .description('Find and display the nearest README.md')
       .option('-p, --port <number>', 'Server port', validatePort, 3000);
 
@@ -75,7 +75,7 @@ export function parseCLI(argv) {
 
   // Default: parse as regular server options
   program
-    .name('mdv')
+    .name('mdlv')
     .description('Serve Markdown files as HTML')
     .version('2.0.0')
     .option('-p, --port <number>', 'Server port', validatePort, 3000)

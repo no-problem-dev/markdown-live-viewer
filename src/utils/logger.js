@@ -15,7 +15,7 @@ const LOG_LEVELS = {
 class Logger {
   constructor(level = 'INFO') {
     this.level = LOG_LEVELS[level.toUpperCase()] ?? LOG_LEVELS.INFO;
-    this.prefix = '[mdv]';
+    this.prefix = '[mdlv]';
   }
 
   /**

@@ -1,6 +1,6 @@
 {
   "name": "md-lv",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Serve Markdown files as HTML with live features - syntax highlighting, Mermaid diagrams, and MathJax formulas",
   "type": "module",
   "engines": {
@@ -8,7 +8,7 @@
   },
   "main": "src/index.js",
   "bin": {
-    "mdv": "bin/mdv.js"
+    "mdlv": "bin/mdlv.js"
   },
   "files": [
     "bin/",
@@ -20,7 +20,7 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "start": "node bin/mdv.js",
+    "start": "node bin/mdlv.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/unit",
     "test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/integration",
