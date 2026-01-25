@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import markdownRouter from './routes/markdown.js';
 import rawRouter from './routes/raw.js';
+import assetsRouter from './routes/assets.js';
 import directoryRouter from './routes/directory.js';
 import apiRouter from './routes/api.js';
 import { securityHeaders, pathTraversalGuard } from './middleware/security.js';
@@ -23,6 +24,7 @@ export function createServer(options = {}) {
   // ドキュメントルートの設定
   const docRoot = path.resolve(options.dir || '.');
   app.set('docRoot', docRoot);
+  app.set('docRootName', path.basename(docRoot));
 
   // セキュリティミドルウェア（最初に登録）
   app.use(securityHeaders);
@@ -49,6 +51,9 @@ export function createServer(options = {}) {
 
   // Raw コード表示ルート（.js, .py 等）
   app.use(rawRouter);
+
+  // 画像ファイル配信ルート
+  app.use(assetsRouter);
 
   // ディレクトリ一覧ルート
   app.use(directoryRouter);
