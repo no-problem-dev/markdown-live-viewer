@@ -49,3 +49,14 @@ temp/
 
 # Archived
 archived-markserv/
+
+# AI development tools (internal only)
+.claude/
+.serena/
+
+# Specification documents (internal only)
+spec/
+
+# Development files (not for public)
+CONTRIBUTING.md
+test-server.js

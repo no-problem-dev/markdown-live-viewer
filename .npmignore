@@ -22,6 +22,14 @@ archived-markserv/
 .gitattributes
 .travis.yml
 .serena/
+.claude/
+
+# Development files (not for public)
+CONTRIBUTING.md
+test-server.js
+
+# Package archives
+*.tgz
 
 # Environment
 .env
