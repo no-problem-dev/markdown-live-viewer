@@ -45,12 +45,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/no-problem-dev/markdown-viewer.git"
+    "url": "git+https://github.com/no-problem-dev/markdown-live-viewer.git"
   },
   "bugs": {
-    "url": "https://github.com/no-problem-dev/markdown-viewer/issues"
+    "url": "https://github.com/no-problem-dev/markdown-live-viewer/issues"
   },
-  "homepage": "https://github.com/no-problem-dev/markdown-viewer#readme",
+  "homepage": "https://github.com/no-problem-dev/markdown-live-viewer#readme",
   "dependencies": {
     "express": "^5.0.0",
     "commander": "^12.0.0",

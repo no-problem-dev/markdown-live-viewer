@@ -1,4 +1,4 @@
-# markdown-viewer
+# md-lv
 
 > Serve Markdown files as HTML with live features
 
@@ -123,8 +123,8 @@ $$
 
 ```bash
 # Clone repository
-git clone https://github.com/your-username/markdown-viewer.git
-cd markdown-viewer
+git clone https://github.com/no-problem-dev/markdown-live-viewer.git
+cd markdown-live-viewer
 
 # Install dependencies
 npm install

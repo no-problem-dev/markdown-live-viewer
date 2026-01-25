@@ -1,5 +1,5 @@
 /**
- * markdown-viewer Navigation Enhancement
+ * md-lv Navigation Enhancement
  * Keyboard navigation and UI improvements
  */
 

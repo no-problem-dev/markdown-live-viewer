@@ -28,7 +28,7 @@ assignees: ''
 
 - OS: [e.g., macOS 14.0, Ubuntu 22.04, Windows 11]
 - Node.js version: [e.g., 20.10.0]
-- markdown-viewer version: [e.g., 2.0.0]
+- md-lv version: [e.g., 2.0.0]
 
 ## Additional Context
 

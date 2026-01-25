@@ -1,10 +1,10 @@
 # Architecture
 
-This document describes the architecture of markdown-viewer.
+This document describes the architecture of md-lv.
 
 ## Overview
 
-markdown-viewer is a Node.js application that serves Markdown files as HTML with live features like syntax highlighting, Mermaid diagrams, and MathJax formulas.
+md-lv is a Node.js application that serves Markdown files as HTML with live features like syntax highlighting, Mermaid diagrams, and MathJax formulas.
 
 ## System Architecture
 
@@ -45,7 +45,7 @@ markdown-viewer is a Node.js application that serves Markdown files as HTML with
 ## Directory Structure
 
 ```
-markdown-viewer/
+md-lv/
 ├── bin/
 │   └── mdv.js              # CLI entry point
 ├── src/

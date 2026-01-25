@@ -1,5 +1,5 @@
 /**
- * markdown-viewer Search Functionality
+ * md-lv Search Functionality
  */
 
 document.addEventListener('DOMContentLoaded', () => {
