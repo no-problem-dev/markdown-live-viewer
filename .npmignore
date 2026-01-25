@@ -1,0 +1,34 @@
+# Development files
+.git/
+.github/
+.vscode/
+.idea/
+
+# Test files
+tests/
+coverage/
+jest.config.js
+
+# Documentation source
+docs/
+spec/
+
+# Archives
+archived-markserv/
+
+# Config files
+.editorconfig
+.gitignore
+.gitattributes
+.travis.yml
+.serena/
+
+# Environment
+.env
+.env.*
+
+# Misc
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
