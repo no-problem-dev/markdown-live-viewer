@@ -1,5 +1,5 @@
 /**
- * markdown-viewer Client-side JavaScript
+ * md-lv Client-side JavaScript
  */
 
 document.addEventListener('DOMContentLoaded', async () => {

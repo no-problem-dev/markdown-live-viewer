@@ -2,7 +2,7 @@
 
 ## Overview
 
-markdown-viewer implements multiple security measures to protect against common web vulnerabilities.
+md-lv implements multiple security measures to protect against common web vulnerabilities.
 
 ## Path Traversal Prevention
 
