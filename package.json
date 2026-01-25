@@ -1,6 +1,6 @@
 {
-  "name": "markdown-viewer",
-  "version": "2.0.0",
+  "name": "md-lv",
+  "version": "1.0.0",
   "description": "Serve Markdown files as HTML with live features - syntax highlighting, Mermaid diagrams, and MathJax formulas",
   "type": "module",
   "engines": {
@@ -41,16 +41,16 @@
     "docs",
     "cli"
   ],
-  "author": "",
+  "author": "Watanabe Riku",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-username/markdown-viewer.git"
+    "url": "git+https://github.com/no-problem-dev/markdown-viewer.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/markdown-viewer/issues"
+    "url": "https://github.com/no-problem-dev/markdown-viewer/issues"
   },
-  "homepage": "https://github.com/your-username/markdown-viewer#readme",
+  "homepage": "https://github.com/no-problem-dev/markdown-viewer#readme",
   "dependencies": {
     "express": "^5.0.0",
     "commander": "^12.0.0",
