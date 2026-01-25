@@ -22,9 +22,6 @@ async function getAllFiles(dir, baseDir, maxDepth = 5, currentDepth = 0) {
     const entries = await fs.readdir(dir, { withFileTypes: true });
 
     for (const entry of entries) {
-      // 隠しファイル・ディレクトリをスキップ
-      if (entry.name.startsWith('.')) continue;
-
       // node_modules をスキップ
       if (entry.name === 'node_modules') continue;
 

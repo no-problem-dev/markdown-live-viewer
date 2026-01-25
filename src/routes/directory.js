@@ -73,11 +73,8 @@ router.get(/^\/.*/, async (req, res, next) => {
       return a.name.localeCompare(b.name);
     });
 
-    // 隠しファイルをフィルタ（オプション）
-    const visible = sorted.filter(entry => !entry.name.startsWith('.'));
-
     // HTML リスト生成
-    const listHtml = visible.map(entry => {
+    const listHtml = sorted.map(entry => {
       const isDir = entry.isDirectory;
       const href = path.join(requestPath, entry.name) + (isDir ? '/' : '');
       const iconClass = getIconClass(entry.name, isDir);
