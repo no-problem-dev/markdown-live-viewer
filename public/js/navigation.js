@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initKeyboardNavigation();
   initDirectoryListNavigation();
   initBackToTop();
+  initCopyFilename();
 });
 
 /**
@@ -179,6 +180,71 @@ function initBackToTop() {
   button.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+}
+
+/**
+ * ファイル名コピーボタンを初期化
+ */
+function initCopyFilename() {
+  const breadcrumbs = document.getElementById('breadcrumbs');
+  if (!breadcrumbs) return;
+
+  const currentSpan = breadcrumbs.querySelector('.current');
+  if (!currentSpan) return;
+
+  const filename = currentSpan.textContent.trim();
+  if (!filename) return;
+
+  // コピーボタンを作成
+  const copyButton = document.createElement('button');
+  copyButton.id = 'copy-filename';
+  copyButton.type = 'button';
+  copyButton.title = 'Copy filename';
+  copyButton.setAttribute('aria-label', 'Copy filename');
+  copyButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+
+  // currentSpanの後にボタンを挿入
+  currentSpan.insertAdjacentElement('afterend', copyButton);
+
+  // クリックイベント
+  copyButton.addEventListener('click', async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    try {
+      await navigator.clipboard.writeText(filename);
+      showCopySuccess(copyButton);
+    } catch (err) {
+      // フォールバック: execCommandを使用
+      const textArea = document.createElement('textarea');
+      textArea.value = filename;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showCopySuccess(copyButton);
+      } catch (e) {
+        console.error('Copy failed:', e);
+      }
+      document.body.removeChild(textArea);
+    }
+  });
+}
+
+/**
+ * コピー成功時のフィードバック表示
+ */
+function showCopySuccess(button) {
+  const originalHTML = button.innerHTML;
+  button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+  button.classList.add('copied');
+
+  setTimeout(() => {
+    button.innerHTML = originalHTML;
+    button.classList.remove('copied');
+  }, 1500);
 }
 
 /**

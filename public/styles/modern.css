@@ -89,6 +89,41 @@ a:hover {
   font-weight: 500;
 }
 
+/* Copy Filename Button */
+#copy-filename {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  padding: 4px 6px;
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  vertical-align: middle;
+}
+
+#copy-filename:hover {
+  background-color: var(--color-bg);
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
+}
+
+#copy-filename:active {
+  transform: scale(0.95);
+}
+
+#copy-filename.copied {
+  color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+#copy-filename svg {
+  display: block;
+}
+
 /* ============================================
    Code Blocks Enhancement
    ============================================ */
