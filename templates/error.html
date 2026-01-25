@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+  <link rel="stylesheet" href="/static/styles/base.css">
+  <link rel="stylesheet" href="/static/styles/modern.css">
+  <style>
+    .error-container {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .error-code {
+      font-size: 6em;
+      font-weight: bold;
+      color: var(--color-text-muted, #6a737d);
+      margin: 0;
+      line-height: 1;
+    }
+    .error-title {
+      font-size: 1.5em;
+      margin: 20px 0;
+      color: var(--color-text, #24292e);
+    }
+    .error-message {
+      color: var(--color-text-secondary, #586069);
+      margin-bottom: 30px;
+    }
+    .error-actions {
+      margin-top: 30px;
+    }
+    .error-actions a {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: var(--color-link, #0366d6);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      margin: 0 10px;
+      transition: opacity 0.2s;
+    }
+    .error-actions a:hover {
+      opacity: 0.8;
+      text-decoration: none;
+    }
+    .error-details {
+      margin-top: 40px;
+      padding: 20px;
+      background-color: var(--color-bg-secondary, #f6f8fa);
+      border-radius: 6px;
+      text-align: left;
+      font-family: monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      color: var(--color-text-muted, #6a737d);
+    }
+  </style>
+</head>
+<body>
+  <main class="error-container">
+    <p class="error-code">{{statusCode}}</p>
+    <h1 class="error-title">{{title}}</h1>
+    <p class="error-message">{{message}}</p>
+    <div class="error-actions">
+      <a href="/">Go to Home</a>
+      <a href="javascript:history.back()">Go Back</a>
+    </div>
+    {{#if details}}
+    <pre class="error-details">{{details}}</pre>
+    {{/if}}
+  </main>
+</body>
+</html>
