@@ -31,8 +31,9 @@ router.get(/.*\.md$/i, async (req, res, next) => {
     const content = await fs.readFile(filePath, 'utf-8');
 
     // テンプレートにMarkdownを埋め込み（クライアント側でレンダリング）
+    const docRootName = req.app.get('docRootName');
     const html = renderTemplate('page', {
-      title: path.basename(filePath),
+      title: `${path.basename(filePath)} - ${docRootName}`,
       content: `<div id="markdown-source" style="display:none">${escapeHtml(content)}</div>
                 <div id="markdown-rendered"></div>`,
       breadcrumbs: generateBreadcrumbs(requestPath)

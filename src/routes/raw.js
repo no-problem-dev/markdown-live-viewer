@@ -58,8 +58,9 @@ router.get(/^\/.*/, async (req, res, next) => {
     const language = getLanguageFromExtension(ext);
     const fileName = path.basename(filePath);
 
+    const docRootName = req.app.get('docRootName');
     const html = renderTemplate('page', {
-      title: fileName,
+      title: `${fileName} - ${docRootName}`,
       content: `<h1>${escapeHtml(fileName)}</h1>
                 <pre><code class="language-${language}">${escapeHtml(content)}</code></pre>`,
       breadcrumbs: generateBreadcrumbs(requestPath)

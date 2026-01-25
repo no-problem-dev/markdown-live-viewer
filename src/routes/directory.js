@@ -94,8 +94,9 @@ router.get(/^\/.*/, async (req, res, next) => {
       ? `<li class="folder parent"><a href="${path.dirname(requestPath)}/">..</a><span class="size">-</span></li>\n`
       : '';
 
+    const docRootName = req.app.get('docRootName');
     const html = renderTemplate('page', {
-      title: `Index of ${requestPath}`,
+      title: `${requestPath === '/' ? docRootName : requestPath} - ${docRootName}`,
       content: `<h1>Index of ${escapeHtml(requestPath)}</h1>
                 <ul class="directory-listing">${parentLink}${listHtml}</ul>`,
       breadcrumbs: generateBreadcrumbs(requestPath)
