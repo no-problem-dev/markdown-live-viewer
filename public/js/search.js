@@ -72,122 +72,26 @@ function initSearch() {
  * 検索 UI を作成
  */
 function createSearchUI() {
-  const breadcrumbs = document.getElementById('breadcrumbs');
-  if (!breadcrumbs) return;
+  const sidebarSearch = document.getElementById('sidebar-search');
+  if (!sidebarSearch) return;
 
   // 検索コンテナを作成
-  const container = document.createElement('div');
-  container.id = 'search-container';
-  container.innerHTML = `
-    <div class="search-wrapper">
-      <input type="text"
-             id="search-input"
-             placeholder="Search files... (press /)"
-             autocomplete="off"
-             aria-label="Search files">
-      <div id="search-results" class="search-results" hidden></div>
+  sidebarSearch.innerHTML = `
+    <div id="search-container">
+      <div class="search-wrapper">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text"
+               id="search-input"
+               placeholder="Search files... (/)"
+               autocomplete="off"
+               aria-label="Search files">
+        <div id="search-results" class="search-results" hidden></div>
+      </div>
     </div>
   `;
-
-  // スタイルを追加
-  const style = document.createElement('style');
-  style.textContent = `
-    #search-container {
-      margin-bottom: 16px;
-    }
-
-    .search-wrapper {
-      position: relative;
-    }
-
-    #search-input {
-      width: 100%;
-      max-width: 400px;
-      padding: 8px 12px;
-      font-size: 14px;
-      border: 1px solid var(--color-border, #e1e4e8);
-      border-radius: 6px;
-      background-color: var(--color-bg, #ffffff);
-      color: var(--color-text, #24292e);
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    #search-input:focus {
-      outline: none;
-      border-color: var(--color-link, #0366d6);
-      box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.1);
-    }
-
-    #search-input::placeholder {
-      color: var(--color-text-muted, #6a737d);
-    }
-
-    .search-results {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      max-width: 400px;
-      max-height: 300px;
-      overflow-y: auto;
-      background-color: var(--color-bg, #ffffff);
-      border: 1px solid var(--color-border, #e1e4e8);
-      border-radius: 6px;
-      box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
-      z-index: 100;
-      margin-top: 4px;
-    }
-
-    .search-results[hidden] {
-      display: none;
-    }
-
-    .search-result-item {
-      display: block;
-      padding: 8px 12px;
-      color: var(--color-text, #24292e);
-      text-decoration: none;
-      border-bottom: 1px solid var(--color-border, #e1e4e8);
-      font-size: 14px;
-    }
-
-    .search-result-item:last-child {
-      border-bottom: none;
-    }
-
-    .search-result-item:hover,
-    .search-result-item:focus {
-      background-color: var(--color-bg-secondary, #f6f8fa);
-      outline: none;
-    }
-
-    .search-result-item .file-name {
-      font-weight: 500;
-    }
-
-    .search-result-item .file-path {
-      color: var(--color-text-muted, #6a737d);
-      font-size: 12px;
-      margin-top: 2px;
-    }
-
-    .search-no-results {
-      padding: 12px;
-      color: var(--color-text-muted, #6a737d);
-      text-align: center;
-    }
-
-    .search-loading {
-      padding: 12px;
-      text-align: center;
-      color: var(--color-text-muted, #6a737d);
-    }
-  `;
-
-  document.head.appendChild(style);
-
-  // ブレッドクラムの後に挿入
-  breadcrumbs.parentNode.insertBefore(container, breadcrumbs.nextSibling);
 }
 
 /**

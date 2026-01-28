@@ -1,4 +1,53 @@
 /**
+ * 拡張子のないファイル名から highlight.js の言語名を取得
+ * @param {string} filename - ファイル名
+ * @returns {string|null} - highlight.js の言語名、マッチしない場合は null
+ */
+export function getLanguageFromFilename(filename) {
+  const filenameMap = {
+    // Build systems
+    'Makefile': 'makefile',
+    'makefile': 'makefile',
+    'GNUmakefile': 'makefile',
+    'CMakeLists.txt': 'cmake',
+
+    // Docker
+    'Dockerfile': 'dockerfile',
+    'dockerfile': 'dockerfile',
+
+    // Git
+    '.gitignore': 'plaintext',
+    '.gitattributes': 'plaintext',
+    '.gitmodules': 'ini',
+
+    // Editor/IDE
+    '.editorconfig': 'ini',
+
+    // Shell config
+    '.bashrc': 'bash',
+    '.bash_profile': 'bash',
+    '.zshrc': 'zsh',
+    '.profile': 'bash',
+
+    // Node.js
+    '.npmrc': 'ini',
+    '.nvmrc': 'plaintext',
+
+    // Misc
+    'Vagrantfile': 'ruby',
+    'Rakefile': 'ruby',
+    'Gemfile': 'ruby',
+    'Procfile': 'yaml',
+    'LICENSE': 'plaintext',
+    'CHANGELOG': 'plaintext',
+    'AUTHORS': 'plaintext',
+    'CONTRIBUTORS': 'plaintext'
+  };
+
+  return filenameMap[filename] || null;
+}
+
+/**
  * ファイル拡張子から highlight.js の言語名を取得
  * @param {string} ext - ファイル拡張子（.付き）
  * @returns {string} - highlight.js の言語名

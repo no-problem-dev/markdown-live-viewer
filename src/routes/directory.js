@@ -42,6 +42,23 @@ router.get(/^\/.*/, async (req, res, next) => {
     // ディレクトリ内容を取得
     const entries = await fs.readdir(dirPath, { withFileTypes: true });
 
+    // README.md を探す（大文字小文字を区別しない）
+    const readmeEntry = entries.find(entry =>
+      !entry.isDirectory() && entry.name.toLowerCase() === 'readme.md'
+    );
+
+    let readmeHtml = '';
+    if (readmeEntry && requestPath !== '/') {
+      try {
+        const readmePath = path.join(dirPath, readmeEntry.name);
+        const readmeContent = await fs.readFile(readmePath, 'utf-8');
+        readmeHtml = `<div id="markdown-source" style="display:none">${escapeHtml(readmeContent)}</div>
+                <div id="markdown-rendered"></div>`;
+      } catch {
+        // README.md の読み込みに失敗した場合は無視
+      }
+    }
+
     // エントリー情報を取得（サイズなど）
     const entriesWithInfo = await Promise.all(
       entries.map(async (entry) => {
@@ -95,7 +112,7 @@ router.get(/^\/.*/, async (req, res, next) => {
     const html = renderTemplate('page', {
       title: `${requestPath === '/' ? docRootName : requestPath} - ${docRootName}`,
       content: `<h1>Index of ${escapeHtml(requestPath)}</h1>
-                <ul class="directory-listing">${parentLink}${listHtml}</ul>`,
+                <ul class="directory-listing">${parentLink}${listHtml}</ul>${readmeHtml}`,
       breadcrumbs: generateBreadcrumbs(requestPath)
     });
 
