@@ -3,7 +3,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { validatePath } from '../utils/path.js';
 import { renderTemplate } from '../utils/template.js';
-import { getLanguageFromExtension, isSupportedExtension } from '../utils/language.js';
+import { getLanguageFromExtension, getLanguageFromFilename, isSupportedExtension } from '../utils/language.js';
 import { escapeHtml } from '../utils/html.js';
 import { generateBreadcrumbs } from '../utils/navigation.js';
 
@@ -23,8 +23,11 @@ router.get(/^\/.*/, async (req, res, next) => {
       return next();
     }
 
-    // サポートされていない拡張子は次のハンドラへ
-    if (!isSupportedExtension(ext)) {
+    const fileName = path.basename(requestPath);
+    const filenameLanguage = getLanguageFromFilename(fileName);
+
+    // サポートされていない拡張子かつファイル名でも判定できない場合は次のハンドラへ
+    if (!isSupportedExtension(ext) && !filenameLanguage) {
       return next();
     }
 
@@ -55,8 +58,8 @@ router.get(/^\/.*/, async (req, res, next) => {
 
     // ファイル読み込み
     const content = await fs.readFile(filePath, 'utf-8');
-    const language = getLanguageFromExtension(ext);
-    const fileName = path.basename(filePath);
+    // 拡張子ベースの言語判定を優先し、なければファイル名ベース
+    const language = isSupportedExtension(ext) ? getLanguageFromExtension(ext) : (filenameLanguage || 'plaintext');
 
     const docRootName = req.app.get('docRootName');
     const html = renderTemplate('page', {

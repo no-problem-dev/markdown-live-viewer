@@ -81,6 +81,8 @@ export function parseCLI(argv) {
     .option('-p, --port <number>', 'Server port', validatePort, 3000)
     .option('-H, --host <string>', 'Bind address', 'localhost')
     .option('-d, --dir <path>', 'Document root directory', '.')
+    .option('-o, --open', 'Open browser on start (default: true)', true)
+    .option('--no-open', 'Do not open browser on start')
     .option('--no-watch', 'Disable file watching')
     .option('-q, --quiet', 'Suppress log output')
     .option('--debug', 'Enable debug logging')
@@ -120,13 +122,26 @@ export async function run(argv) {
       console.log(`Port ${options.port} is in use.`);
     }
 
-    app.listen(actualPort, options.host, () => {
+    app.listen(actualPort, options.host, async () => {
+      const url = `http://${options.host}:${actualPort}`;
       if (!options.quiet) {
-        console.log(`mdv running at http://${options.host}:${actualPort}`);
+        console.log(`mdv running at ${url}`);
         console.log(`Document root: ${options.dir}`);
         if (options.debug) {
           console.log('Debug mode enabled');
           console.log('Options:', { ...options, port: actualPort });
+        }
+      }
+
+      // ブラウザを自動で開く
+      if (options.open) {
+        try {
+          const open = await import('open');
+          await open.default(url);
+        } catch (err) {
+          if (!options.quiet) {
+            console.log(`Could not open browser: ${url}`);
+          }
         }
       }
     });

@@ -17,6 +17,110 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 /**
+ * frontmatter をパースして本文と分離
+ * @param {string} markdown - Markdown テキスト
+ * @returns {{ frontmatter: Object|null, body: string }}
+ */
+function parseFrontmatter(markdown) {
+  // より柔軟な正規表現: 先頭の---から次の---までをマッチ
+  const frontmatterRegex = /^---[ \t]*[\r\n]+([\s\S]*?)[\r\n]+---[ \t]*(?:[\r\n]+|$)/;
+  const match = markdown.match(frontmatterRegex);
+
+  if (!match) {
+    return { frontmatter: null, body: markdown };
+  }
+
+  const yamlContent = match[1].trim();
+  const body = markdown.slice(match[0].length);
+
+  // frontmatterが空の場合
+  if (!yamlContent) {
+    return { frontmatter: null, body };
+  }
+
+  // YAML パース（key: value 形式と配列形式に対応）
+  const frontmatter = {};
+  const lines = yamlContent.split('\n');
+  let currentKey = null;
+
+  for (const line of lines) {
+    // 配列アイテム（- value）のチェック
+    const arrayItemMatch = line.match(/^[ \t]+-[ \t]+(.*)$/);
+    if (arrayItemMatch && currentKey) {
+      const itemValue = parseYamlValue(arrayItemMatch[1]);
+      if (!Array.isArray(frontmatter[currentKey])) {
+        frontmatter[currentKey] = [];
+      }
+      frontmatter[currentKey].push(itemValue);
+      continue;
+    }
+
+    // key: value 形式のチェック
+    const colonIndex = line.indexOf(':');
+    if (colonIndex > 0 && !line.match(/^[ \t]/)) {
+      const key = line.slice(0, colonIndex).trim();
+      const value = line.slice(colonIndex + 1).trim();
+
+      if (key) {
+        currentKey = key;
+        if (value) {
+          // 同じ行に値がある場合
+          frontmatter[key] = parseYamlValue(value);
+        }
+        // 値が空の場合は次の行で配列として処理される可能性がある
+      }
+    }
+  }
+
+  return { frontmatter, body };
+}
+
+/**
+ * YAML の値をパース（クォート除去など）
+ */
+function parseYamlValue(value) {
+  value = value.trim();
+  // クォートを除去
+  if ((value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))) {
+    return value.slice(1, -1);
+  }
+  return value;
+}
+
+/**
+ * frontmatter をテーブル形式の HTML に変換
+ * @param {Object} frontmatter - パースされた frontmatter オブジェクト
+ * @returns {string} HTML 文字列
+ */
+function renderFrontmatterTable(frontmatter) {
+  if (!frontmatter || Object.keys(frontmatter).length === 0) {
+    return '';
+  }
+
+  const rows = Object.entries(frontmatter)
+    .map(([key, value]) => {
+      const escapedKey = escapeHtmlForMermaid(key);
+      let valueHtml;
+      if (Array.isArray(value)) {
+        // 配列の場合はリストとして表示
+        const items = value.map(item => `<li>${escapeHtmlForMermaid(item)}</li>`).join('');
+        valueHtml = `<ul class="frontmatter-list">${items}</ul>`;
+      } else {
+        valueHtml = escapeHtmlForMermaid(value);
+      }
+      return `<tr><th>${escapedKey}</th><td>${valueHtml}</td></tr>`;
+    })
+    .join('');
+
+  return `<div class="frontmatter-container">
+    <table class="frontmatter-table">
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+}
+
+/**
  * Markdown をレンダリング
  */
 function renderMarkdown() {
@@ -24,7 +128,10 @@ function renderMarkdown() {
   const rendered = document.getElementById('markdown-rendered');
 
   if (source && rendered && typeof marked !== 'undefined') {
-    const markdown = source.textContent;
+    const rawMarkdown = source.textContent;
+
+    // frontmatter をパース
+    const { frontmatter, body: markdown } = parseFrontmatter(rawMarkdown);
 
     // カスタムレンダラーで Mermaid コードブロックを処理
     let mermaidCounter = 0;
@@ -49,8 +156,9 @@ function renderMarkdown() {
       renderer
     });
 
-    // Markdown をレンダリング
-    rendered.innerHTML = marked.parse(markdown);
+    // frontmatter と Markdown をレンダリング
+    const frontmatterHtml = renderFrontmatterTable(frontmatter);
+    rendered.innerHTML = frontmatterHtml + marked.parse(markdown);
   }
 }
 

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import fs from 'fs/promises';
 import path from 'path';
 import { validatePath } from '../utils/path.js';
+import { getIconClass } from '../utils/icons.js';
 
 const router = Router();
 
@@ -41,6 +42,58 @@ async function getAllFiles(dir, baseDir, maxDepth = 5, currentDepth = 0) {
 
   return files;
 }
+
+/**
+ * ディレクトリツリー API エンドポイント
+ * GET /api/tree?dir=/path
+ */
+router.get('/api/tree', async (req, res) => {
+  try {
+    const { dir = '/' } = req.query;
+    const docRoot = req.app.get('docRoot');
+
+    let targetDir;
+    try {
+      targetDir = validatePath(dir, docRoot);
+    } catch (error) {
+      return res.status(400).json({ error: 'Invalid directory path' });
+    }
+
+    const entries = await fs.readdir(targetDir, { withFileTypes: true });
+    const items = [];
+
+    for (const entry of entries) {
+      // node_modules をスキップ
+      if (entry.name === 'node_modules') {
+        continue;
+      }
+
+      const isDirectory = entry.isDirectory();
+      const relativePath = path.join(dir, entry.name);
+      const normalizedPath = relativePath.replace(/\\/g, '/');
+
+      items.push({
+        name: entry.name,
+        path: isDirectory ? normalizedPath + '/' : normalizedPath,
+        isDirectory,
+        iconClass: getIconClass(entry.name, isDirectory)
+      });
+    }
+
+    // ディレクトリを先に、次にファイルをアルファベット順でソート
+    items.sort((a, b) => {
+      if (a.isDirectory !== b.isDirectory) {
+        return a.isDirectory ? -1 : 1;
+      }
+      return a.name.localeCompare(b.name);
+    });
+
+    res.json({ items, dir });
+  } catch (error) {
+    console.error('Tree error:', error);
+    res.status(500).json({ error: 'Failed to load directory' });
+  }
+});
 
 /**
  * 検索 API エンドポイント
