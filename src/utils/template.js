@@ -28,7 +28,7 @@ export function renderTemplate(templateName, variables = {}) {
   let html = template;
   for (const [key, value] of Object.entries(variables)) {
     const regex = new RegExp(`{{${key}}}`, 'g');
-    html = html.replace(regex, value ?? '');
+    html = html.replace(regex, () => value ?? '');
   }
 
   return html;
