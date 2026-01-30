@@ -50,11 +50,9 @@ function addExpandedDirectory(path) {
  */
 function removeExpandedDirectory(path) {
   const expanded = getExpandedDirectories();
-  const index = expanded.indexOf(path);
-  if (index !== -1) {
-    expanded.splice(index, 1);
-    saveExpandedDirectories(expanded);
-  }
+  // 閉じたフォルダとその子孫フォルダを全て削除
+  const filtered = expanded.filter(p => !p.startsWith(path));
+  saveExpandedDirectories(filtered);
 }
 
 /**
@@ -322,8 +320,7 @@ async function expandToPath(targetPath, container) {
         if (chevron && children && !chevron.classList.contains('expanded')) {
           chevron.classList.add('expanded');
           children.classList.add('expanded');
-          // 展開状態を保存
-          addExpandedDirectory(itemPath);
+          // 注: 復元時は中間パスを保存しない（ユーザー操作時のみ保存）
 
           if (children.children.length === 0) {
             const loading = document.createElement('li');
