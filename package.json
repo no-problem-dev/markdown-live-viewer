@@ -1,6 +1,6 @@
 {
   "name": "md-lv",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Serve Markdown files as HTML with live features - syntax highlighting, Mermaid diagrams, and MathJax formulas",
   "type": "module",
   "engines": {

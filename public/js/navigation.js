@@ -147,8 +147,6 @@ function initSidebar() {
     for (const dirPath of expandedDirs) {
       await expandToPath(dirPath, fileTree);
     }
-    // 現在のパスに基づいてツリーを展開（展開状態も保存）
-    await expandToPath(currentPath, fileTree);
   });
 }
 
