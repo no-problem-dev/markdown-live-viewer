@@ -56,6 +56,31 @@ function removeExpandedDirectory(path) {
 }
 
 /**
+ * サイドバーのスクロール位置をlocalStorageに保存
+ */
+function saveSidebarScrollPosition(scrollTop) {
+  try {
+    localStorage.setItem('sidebar-scroll-position', scrollTop.toString());
+  } catch {
+    // Storage full or unavailable
+  }
+}
+
+/**
+ * サイドバーのスクロール位置をlocalStorageから取得して復元
+ */
+function restoreSidebarScrollPosition(element) {
+  try {
+    const savedScrollTop = localStorage.getItem('sidebar-scroll-position');
+    if (savedScrollTop !== null) {
+      element.scrollTop = parseInt(savedScrollTop, 10);
+    }
+  } catch {
+    // Storage unavailable
+  }
+}
+
+/**
  * サイドバーナビゲーションを初期化
  */
 function initSidebar() {
@@ -138,12 +163,34 @@ function initSidebar() {
   // 現在のパスを取得
   const currentPath = window.location.pathname;
 
+  // サイドバーコンテンツのスクロール位置を復元・保存
+  const sidebarContent = document.querySelector('.sidebar-content');
+  if (sidebarContent) {
+    // ページロード時にスクロール位置を復元
+    restoreSidebarScrollPosition(sidebarContent);
+
+    // スクロール時にスクロール位置を保存
+    sidebarContent.addEventListener('scroll', () => {
+      saveSidebarScrollPosition(sidebarContent.scrollTop);
+    });
+
+    // ページ遷移前にスクロール位置を保存
+    window.addEventListener('beforeunload', () => {
+      saveSidebarScrollPosition(sidebarContent.scrollTop);
+    });
+  }
+
   // ルートディレクトリを読み込み
   loadDirectory('/', fileTree, 0).then(async () => {
     // 保存された展開状態を復元
     const expandedDirs = getExpandedDirectories();
     for (const dirPath of expandedDirs) {
       await expandToPath(dirPath, fileTree);
+    }
+
+    // ツリーの読み込み後、再度スクロール位置を復元（コンテンツが変わった場合に備えて）
+    if (sidebarContent) {
+      restoreSidebarScrollPosition(sidebarContent);
     }
   });
 }
