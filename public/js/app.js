@@ -38,15 +38,56 @@ function parseFrontmatter(markdown) {
     return { frontmatter: null, body };
   }
 
-  // YAML パース（key: value 形式と配列形式に対応）
+  // YAML パース（key: value 形式、配列形式、複数行文字列に対応）
   const frontmatter = {};
   const lines = yamlContent.split('\n');
   let currentKey = null;
+  let multilineMode = null; // 'folded' (>) or 'literal' (|)
+  let multilineBuffer = [];
+  let multilineStripTrailing = false;
 
-  for (const line of lines) {
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    // 複数行モード中の処理
+    if (multilineMode && currentKey) {
+      // インデントされた行は複数行コンテンツの一部
+      if (line.match(/^[ \t]+\S/) || line.trim() === '') {
+        // インデントを除去して保存
+        const indentMatch = line.match(/^([ \t]+)(.*)$/);
+        if (indentMatch) {
+          multilineBuffer.push(indentMatch[2]);
+        } else if (line.trim() === '') {
+          multilineBuffer.push('');
+        }
+        continue;
+      } else {
+        // インデントされていない行は複数行モードの終了
+        let result = multilineBuffer.join('\n');
+
+        if (multilineMode === 'folded') {
+          // 改行を空白に置き換え（空行は段落区切りとして保持）
+          result = result.replace(/\n(?!\n)/g, ' ').replace(/\n\n+/g, '\n\n');
+        }
+
+        // 末尾の改行を処理
+        if (multilineStripTrailing) {
+          result = result.replace(/\n+$/, '');
+        }
+
+        frontmatter[currentKey] = result.trim();
+        multilineMode = null;
+        multilineBuffer = [];
+        multilineStripTrailing = false;
+        // 現在の行を再処理するためにインデックスを戻す
+        i--;
+        continue;
+      }
+    }
+
     // 配列アイテム（- value）のチェック
     const arrayItemMatch = line.match(/^[ \t]+-[ \t]+(.*)$/);
-    if (arrayItemMatch && currentKey) {
+    if (arrayItemMatch && currentKey && !multilineMode) {
       const itemValue = parseYamlValue(arrayItemMatch[1]);
       if (!Array.isArray(frontmatter[currentKey])) {
         frontmatter[currentKey] = [];
@@ -63,13 +104,35 @@ function parseFrontmatter(markdown) {
 
       if (key) {
         currentKey = key;
-        if (value) {
+
+        // 複数行文字列の開始記号をチェック
+        if (value === '>' || value === '>-' || value === '|' || value === '|-') {
+          multilineMode = (value.startsWith('>') ? 'folded' : 'literal');
+          multilineStripTrailing = value.endsWith('-');
+          multilineBuffer = [];
+        } else if (value) {
           // 同じ行に値がある場合
           frontmatter[key] = parseYamlValue(value);
+          currentKey = key; // 配列の可能性のためにキーを保持
         }
-        // 値が空の場合は次の行で配列として処理される可能性がある
+        // 値が空の場合は次の行で配列または複数行として処理される
       }
     }
+  }
+
+  // ファイル終端で複数行モードが残っている場合
+  if (multilineMode && currentKey && multilineBuffer.length > 0) {
+    let result = multilineBuffer.join('\n');
+
+    if (multilineMode === 'folded') {
+      result = result.replace(/\n(?!\n)/g, ' ').replace(/\n\n+/g, '\n\n');
+    }
+
+    if (multilineStripTrailing) {
+      result = result.replace(/\n+$/, '');
+    }
+
+    frontmatter[currentKey] = result.trim();
   }
 
   return { frontmatter, body };
